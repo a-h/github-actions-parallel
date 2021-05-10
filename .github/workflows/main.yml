@@ -67,7 +67,7 @@ jobs:
         id: npm-cache-api
         with:
           path: '../api/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('../api/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('./api/package-lock.json') }}
       - name: Run web first, then API
         run: |
           node index.js && cd ../api/ && node index.js
