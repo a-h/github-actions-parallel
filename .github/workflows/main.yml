@@ -14,8 +14,8 @@ jobs:
         with:
           node-version: '14'
       - uses: actions/cache@v2
-        id: npm-cache-web
         with:
+          id: npm-cache-web
           path: './web/node_modules'
           key: ${{ runner.os }}-node-${{ hashFiles('./web/package-lock.json') }}
       - name: Install npm
@@ -26,7 +26,7 @@ jobs:
     defaults:
        run:
           shell: bash
-          working-directory: ./api
+          working-directory: ./web
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -35,8 +35,8 @@ jobs:
         with:
           node-version: '14'
       - uses: actions/cache@v2
-        id: npm-cache-api
         with:
+          id: npm-cache-api
           path: './api/node_modules'
           key: ${{ runner.os }}-node-${{ hashFiles('./api/package-lock.json') }}
       - name: Install npm
@@ -59,15 +59,15 @@ jobs:
         with:
           node-version: '14'
       - uses: actions/cache@v2
-        id: npm-cache-web
         with:
+          id: npm-cache-web
           path: './web/node_modules'
           key: ${{ runner.os }}-node-${{ hashFiles('./web/package-lock.json') }}
       - uses: actions/cache@v2
-        id: npm-cache-api
         with:
-          path: '../api/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('../api/package-lock.json') }}
+          id: npm-cache-api
+          path: './api/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('./api/package-lock.json') }}
       - name: Run web first, then API
         run: |
           node index.js && cd ../api/ && node index.js
