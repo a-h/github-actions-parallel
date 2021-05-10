@@ -36,7 +36,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
       - name: List files in the repository
         run: |
-          cd web && ls
+          ls && cat index.js 
       - name: Run program
         run: |
           node index.js
@@ -60,7 +60,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
       - name: List files in the repository
         run: |
-          cd web && ls
+          ls && cat index.js 
       - name: Run program
         run: |
           node index.js
