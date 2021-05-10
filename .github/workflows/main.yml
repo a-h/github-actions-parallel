@@ -17,9 +17,13 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: ./npm-install.sh
 
-  run-projects:
+  run-web:
     needs: npm-install
     runs-on: ubuntu-latest
+    defaults:
+       run:
+          shell: bash
+          working-directory: ./web
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
@@ -33,3 +37,30 @@ jobs:
       - name: List files in the repository
         run: |
           cd web && ls
+      - name: Run program
+        run: |
+          node index.js
+
+  run-api:
+    needs: npm-install
+    runs-on: ubuntu-latest
+    defaults:
+       run:
+          shell: bash
+          working-directory: ./api
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: List files in the repository
+        run: |
+          cd web && ls
+      - name: Run program
+        run: |
+          node index.js
