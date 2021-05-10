@@ -1,11 +1,7 @@
 name: GitHub Actions Demo
 on: [push]
 jobs:
-  npm-install-web:
-    defaults:
-       run:
-          shell: bash
-          working-directory: ./web
+  npm-install:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -15,38 +11,14 @@ jobs:
           node-version: '14'
       - uses: actions/cache@v2
         with:
-          id: npm-cache-web
-          path: './web/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('./web/package-lock.json') }}
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
       - name: Install npm
-        if: steps.npm-cache-web.outputs.cache-hit != 'true'
-        run: npm install
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: ./npm-install.sh
 
-  npm-install-api:
-    defaults:
-       run:
-          shell: bash
-          working-directory: ./web
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - uses: actions/cache@v2
-        with:
-          id: npm-cache-api
-          path: './api/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('./api/package-lock.json') }}
-      - name: Install npm
-        if: steps.npm-cache-api.outputs.cache-hit != 'true'
-        run: npm install
-
-  run-both:
-    needs: 
-      - npm-install-web
-      - npm-install-api
+  run-web:
+    needs: npm-install
     runs-on: ubuntu-latest
     defaults:
        run:
@@ -60,14 +32,35 @@ jobs:
           node-version: '14'
       - uses: actions/cache@v2
         with:
-          id: npm-cache-web
-          path: './web/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('./web/package-lock.json') }}
-      - uses: actions/cache@v2
-        with:
-          id: npm-cache-api
-          path: './api/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('./api/package-lock.json') }}
-      - name: Run web first, then API
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: List files in the repository
         run: |
-          node index.js && cd ../api/ && node index.js
+          ls && cat index.js 
+      - name: Run program
+        run: |
+          node index.js
+
+  run-api:
+    needs: npm-install
+    runs-on: ubuntu-latest
+    defaults:
+       run:
+          shell: bash
+          working-directory: ./api
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: List files in the repository
+        run: |
+          ls && cat index.js 
+      - name: Run program
+        run: |
+          node index.js
