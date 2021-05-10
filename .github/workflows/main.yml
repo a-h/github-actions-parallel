@@ -1,7 +1,7 @@
 name: GitHub Actions Demo
 on: [push]
 jobs:
-  npm-install-1:
+  npm-install:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -9,12 +9,16 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run:  npm install
-      - name: List files in the repository
-        run: |
-          ls 
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-  npm-install-2:
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: Install npm
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: ./npm-install.sh
+
+  run-projects:
+    needs: npm-install
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -22,8 +26,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run:  npm install
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
       - name: List files in the repository
         run: |
-          ls
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          cd web && ls
