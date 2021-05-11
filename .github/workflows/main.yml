@@ -12,10 +12,10 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node14-${{ hashFiles('**/package-lock.json') }}
       - name: Install npm
         if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: ./npm-install.sh
+        run: npm install
 
   run-web:
     needs: npm-install
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node14-${{ hashFiles('**/package-lock.json') }}
       - name: List files in the repository
         run: |
           ls && cat index.js 
@@ -57,7 +57,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node14-${{ hashFiles('**/package-lock.json') }}
       - name: List files in the repository
         run: |
           ls && cat index.js 
