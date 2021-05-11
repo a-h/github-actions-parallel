@@ -12,7 +12,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node14-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node15-${{ hashFiles('**/package-lock.json') }}
       - name: Install npm
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm install
@@ -33,33 +33,13 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node14-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node15-${{ hashFiles('**/package-lock.json') }}
       - name: List files in the repository
         run: |
           ls && cat index.js 
       - name: Run program
         run: |
           node index.js
-
-  run-yarn-14:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - name: Run yarn
-        run: |
-          yarn --version
-
-  run-yarn-15:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '15'
-      - name: Run yarn
-        run: |
-          yarn --version
 
   run-api:
     needs: npm-install
@@ -77,7 +57,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node14-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node15-${{ hashFiles('**/package-lock.json') }}
       - name: List files in the repository
         run: |
           ls && cat index.js 
