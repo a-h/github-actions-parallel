@@ -1,5 +1,5 @@
 {
-  "name": "workspaces install packages for multiple projects in one operation",
+  "name": "workspace",
   "workspaces": [
     "api",
     "web"
