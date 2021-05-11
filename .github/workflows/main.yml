@@ -12,7 +12,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node14-1-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node14-2-${{ hashFiles('**/package-lock.json') }}
+      - name: Install npm 7 # https://github.blog/2020-10-13-presenting-v7-0-0-of-the-npm-cli/
+        run: npm install -g npm@7
       - name: Install npm
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm install
@@ -33,7 +35,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node14-1-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node14-2-${{ hashFiles('**/package-lock.json') }}
       - name: List files in the repository
         run: |
           ls && cat index.js 
@@ -57,7 +59,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node14-1-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node14-2-${{ hashFiles('**/package-lock.json') }}
       - name: List files in the repository
         run: |
           ls && cat index.js 
